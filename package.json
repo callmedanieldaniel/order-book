@@ -1,0 +1,30 @@
+{
+  "name": "orderbook-canvas",
+  "version": "1.0.0",
+  "description": "OffscreenCanvas-based OrderBook visualization library",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "vite demo",
+    "prepublishOnly": "npm run build",
+    "publish": "npm publish"
+  },
+  "keywords": [
+    "canvas",
+    "orderbook",
+    "webworker",
+    "offscreencanvas"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10"
+  }
+} 
