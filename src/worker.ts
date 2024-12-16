@@ -36,6 +36,14 @@ let ctx: OffscreenCanvasRenderingContext2D;
 let sharedBuffer: SharedArrayBuffer | null = null;
 let options: WorkerOptions;
 
+let frame = 0;
+let transTime = 0;
+
+setInterval(() => {
+  console.log("worker frame rate", frame, transTime);
+  frame = 0;
+}, 1000);
+
 self.onmessage = (event) => {
   const { type, data } = event.data;
 
@@ -80,7 +88,7 @@ function setFont() {
   if (!ctx) return;
   const scaledFontSize = Math.round(options.fontSize * options.scale);
   ctx.font = `${scaledFontSize}px ${options.fontFamily}`;
-  ctx.textAlign = "center"
+  ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 }
 
@@ -129,6 +137,10 @@ function formatValue(value: number, key: string): string {
 }
 
 function drawOrderBook(data: OrderBookData[]) {
+  const ts = Date.now();
+  const pre = data[0].ts;
+  transTime = ts - pre;
+
   if (!ctx) return;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -180,4 +192,5 @@ function drawOrderBook(data: OrderBookData[]) {
       currentX += column.width;
     });
   });
+  frame++;
 }

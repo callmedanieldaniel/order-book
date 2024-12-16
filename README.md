@@ -20,6 +20,9 @@
 16. the row height is decide by the rowHeight.
 17. the row gap is decide by the rowGap. and the bar height is decide by the rowHeight
 18. the scale can be set by the scale property and default is Window.devicePixelRatio or 1.
+19. the on method is implemented by the dom event listener. all row element hava a empty div element over the canvas, and there is a data-index attribute on the div element, you can use it to get the row data index when the event is triggered. event listener is delegated to the parent div element which is also the parent of the canvas element.
+20. the dom drawed over the canvas width is canvas.width, and the every row element div height is rowHeight.
+21. when hover the row, the row will be highlighted, you can set the highlight style by the hoverStyle property to the row div element, but the default row div element is transparent.
 
 # params
 
@@ -37,11 +40,25 @@
 - rowHeight: number; // the row height
 - rowGap: number; // the row gap
 - scale: number; // the scale of the canvas, default is 1
+- hoverStyle:{},  constrol the hover div style when hover the row, default is transparent and background color is rgba(255, 255, 255, 0.5)
 - columns: [
-    {title:'price', key:'price', width:100, align:'left', color:'white'},
-    {title:'volume', key:'volume', width:100, align:'right', color:'white'},
-    {title:'total', key:'total', width:100, align:'right', color:'white'},
+  {title:'price', key:'price', width:100, align:'left', color:'white'},
+  {title:'volume', key:'volume', width:100, align:'right', color:'white'},
+  {title:'total', key:'total', width:100, align:'right', color:'white'},
   ]
+
+# methods
+
+### on
+
+on method works same as dom.addEventListener, you can listen the event on the every row data and get the callback when the event is triggered.
+the event listener is implemented by the dom event listener. because thers is a not visible div element over the canvas.
+
+```js
+orderBook.on("hover", (data) => {
+  console.log(data);
+});
+```
 
 ### update
 
@@ -81,6 +98,10 @@ const orderBook = new OrderBook("orderBookCanvas", {
   barOpacity: 0.5,
   fontFamily: "monospace",
   fontSize: 7,
+  hoverStyle:{
+    border:'1px solid red',
+    backgroundColor:'rgba(0, 0, 255, 0.5)',
+  }
 });
 
 // Update with real data
@@ -96,6 +117,11 @@ orderBook.update([
     total: { value: 1.66334, color: "green" },
   },
 ]);
+
+// the hover eventlistener should like this, and the data is the row data
+orderBook.on("hover", (data) => {
+  console.log(data);
+});
 
 // Clean up when done
 orderBook.destroy();
