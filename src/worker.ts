@@ -15,13 +15,21 @@ interface OrderBookData {
   [key: string]: OrderBookDataValue;
 }
 
+interface GradientStop {
+  position: number;
+  color: string;
+  opacity: number;
+}
+
 interface WorkerOptions {
   rows: number;
   dataRange: [number, number];
   showBgBar: boolean;
   bgColor: string;
   textColor: string;
-  barColor: string;
+  barColor: string | {
+    stops: GradientStop[];
+  };
   barOpacity: number;
   fontFamily: string;
   fontSize: number;
@@ -113,15 +121,36 @@ function drawBackgroundBar(x: number, y: number, width: number, value: number) {
   const barWidth = width * percentage;
   const startX = x + width;
 
-  ctx.globalAlpha = options.barOpacity;
-  ctx.fillStyle = options.barColor;
+  // Create gradient
+  const gradient = ctx.createLinearGradient(
+    startX - barWidth,  // start x
+    0,                  // start y
+    startX,            // end x
+    0                  // end y
+  );
+
+  if (typeof options.barColor === 'string') {
+    // Single color with opacity gradient
+    gradient.addColorStop(0, options.barColor.replace(')', ', 0.9)'));
+    gradient.addColorStop(1, options.barColor.replace(')', ', 0.5)'));
+  } else {
+    // Multiple color stops with positions
+    options.barColor.stops.forEach(({ position, color, opacity }) => {
+      gradient.addColorStop(
+        position,
+        color.includes('rgba') ? color : color.replace(')', `, ${opacity})`)
+      );
+    });
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = gradient;
   ctx.fillRect(
     startX - barWidth,
-    y - options.rowHeight / 2,
+    y - options.rowHeight/2,
     barWidth,
     options.rowHeight
   );
-  ctx.globalAlpha = 1;
 }
 
 function formatValue(value: number, key: string): string {

@@ -24,6 +24,7 @@
 20. the dom drawed over the canvas width is canvas.width, and the every row element div height is rowHeight.
 21. when hover the row, the row will be highlighted, you can set the highlight style by the hoverStyle property to the row div element, but the default row div element is transparent.
 
+
 # params
 
 - rows: number; // to decide the row background color bar width
@@ -31,7 +32,8 @@
 - showBgBar: boolean // to decide if draw data color bar background
 - bgColor: string; // the canvas background color
 - textColor: string; // the text color
-- barColor: string; // the bar background color
+- barColor: string; // when the bar background color is not a gradient setting array, the bar background color is a constant color
+- barColor:[{ start: number, end: number, color: string, opacity: number } ]; // the bar background color gradient
 - barOpacity: number; // the bar background color opacity
 - fontFamily: string; // the font family
 - fontSize: number; // the font size

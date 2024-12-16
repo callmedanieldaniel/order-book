@@ -6,9 +6,15 @@ const orderBook = new OrderBook("orderBookCanvas", {
   //   scale: 2,
   dataRange: [10000, 20000],
   showBgBar: true,
-  bgColor: "#555",
+  bgColor: "#000",
   textColor: "#ffffff",
-  barColor: "#0f0",
+  barColor: {
+    stops: [
+      { position: 0, color: "rgb(0, 255, 0)", opacity: 0.6 },
+      { position: 0.5, color: "rgb(0, 255, 0)", opacity: 0.4 },
+      { position: 1, color: "rgb(0, 255, 0)", opacity: 0.2 }
+    ]
+  },
   barOpacity: 0.2,
   rowGap: 6,
   rowHeight: 20,
